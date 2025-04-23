@@ -30,7 +30,19 @@ resource "aws_iam_role_policy_attachment" "cni_policy" {
 resource "aws_iam_role_policy_attachment" "ecr_read_policy" {
   role       = aws_iam_role.eks_nodegroup_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+
 }
+
+resource "aws_iam_role_policy_attachment" "s3_access" {
+  role       = aws_iam_role.eks_nodegroup_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "efs_access" {
+  role       = aws_iam_role.eks_nodegroup_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonElasticFileSystemClientReadWriteAccess"
+}
+
 resource "aws_eks_node_group" "node" {
   cluster_name    = var.cluster_name
   node_group_name = "${var.env}-nodegroup"
