@@ -87,3 +87,12 @@ module "openid_connector" {
   client_secret = var.oidc_client_secret
   issuer_url    = var.oidc_issuer_url
 }
+
+module "irsa_s3" {
+  source                = "../modules/irsa-s3"
+  env                   = var.env
+  namespace             = "default"
+  service_account_name  = "s3-access-sa"
+  oidc_provider_url     = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
+  oidc_provider_arn     = data.aws_iam_openid_connect_provider.eks_oidc.arn
+}
